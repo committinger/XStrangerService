@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5EDCABEE-F5F4-4BAE-A3A9-BAD7FF4ED365}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{66CB4B9B-6828-4B6F-8DA5-A8222177AFF3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Committinger.XStrangerService.ServiceInterface</RootNamespace>
-    <AssemblyName>Committinger.XStrangerService.ServiceInterface</AssemblyName>
+    <RootNamespace>ConsoleHost</RootNamespace>
+    <AssemblyName>ConsoleHost</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,7 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -42,17 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataContracts\CircleData.cs" />
-    <Compile Include="DataContracts\HeadData.cs" />
-    <Compile Include="DataContracts\MessageCollectionData.cs" />
-    <Compile Include="DataContracts\MessageData.cs" />
-    <Compile Include="DataContracts\ResultData.cs" />
-    <Compile Include="DataContracts\StructedResultData.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceContext.cs" />
-    <Compile Include="ServiceContracts\IStrangerService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\ServiceInterface\ServiceInterface.csproj">
+      <Project>{5edcabee-f5f4-4bae-a3a9-bad7ff4ed365}</Project>
+      <Name>ServiceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\ServiceImplementation\ServiceImplementation.csproj">
+      <Project>{c0c0e957-33b3-409f-996e-f905ee2845ab}</Project>
+      <Name>ServiceImplementation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

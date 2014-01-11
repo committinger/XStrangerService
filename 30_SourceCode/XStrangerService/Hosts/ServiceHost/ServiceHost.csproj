@@ -59,6 +59,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="StrangerService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +69,10 @@
     <ProjectReference Include="..\..\Interfaces\ServiceInterface\ServiceInterface.csproj">
       <Project>{5edcabee-f5f4-4bae-a3a9-bad7ff4ed365}</Project>
       <Name>ServiceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\ServiceImplementation\ServiceImplementation.csproj">
+      <Project>{c0c0e957-33b3-409f-996e-f905ee2845ab}</Project>
+      <Name>ServiceImplementation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
