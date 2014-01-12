@@ -13,7 +13,7 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
         public string UserTo { get; set; }
 
         [DataMember(Name = "message_type")]
-        public string MessageType { get; set; }
+        public int MessageType { get; set; }
 
         [DataMember(Name = "message_content")]
         public string Content { get; set; }

@@ -12,6 +12,9 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
     public class StructedResultData<T> : ResultData
     {
         [DataMember(Name = "body")]
-        T Body { get; set; }
+        public T Body { get; set; }
+
+        [DataMember(Name = "user_name")]
+        public string UserName { get; set; }
     }
 }
