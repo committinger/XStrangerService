@@ -17,7 +17,7 @@ namespace XSSFramework.IO
         {
             string directoryPath = Path.GetDirectoryName(fileFullPath);
             if (!Directory.Exists(directoryPath))
-                PathUtils.ThreadSafeCreateDirectory(directoryPath);
+                DirectoryUtils.ThreadSafeCreateDirectory(directoryPath);
             threadsafeAppendText(fileFullPath, content, Encoding.UTF8);
         }
 

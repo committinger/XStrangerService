@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace XSSFramework.IO
 {
-    public sealed class PathUtils
+    public sealed class DirectoryUtils
     {
-        private PathUtils() { }
+        private DirectoryUtils() { }
 
         private static object _lockObj = new object();
 

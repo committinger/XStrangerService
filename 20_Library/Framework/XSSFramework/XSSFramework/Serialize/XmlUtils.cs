@@ -15,40 +15,28 @@ namespace XSSFramework.Serialize
 
         public static string Serialize(object obj)
         {
-            try
-            {
-                XmlSerializer xs = new XmlSerializer(obj.GetType());
-                using (StringWriter sw = new StringWriter())
-                {
-                    xs.Serialize(sw, obj);
-                    return sw.ToString();
-                }
-            }
-            catch
-            {
+            if (obj == null || !obj.GetType().IsSerializable)
                 return string.Empty;
+            XmlSerializer xs = new XmlSerializer(obj.GetType());
+            using (StringWriter sw = new StringWriter())
+            {
+                xs.Serialize(sw, obj);
+                return sw.ToString();
             }
         }
 
         public static string SerializeData(object obj)
         {
-            try
-            {
-                if (obj == null)
-                    return null;
-                XmlSerializer xs = new XmlSerializer(obj.GetType());
-                XmlWriterSettings xws = new XmlWriterSettings() { OmitXmlDeclaration = true };
-                using (StringWriter sw = new StringWriter())
-                using (XmlWriter xw = XmlWriter.Create(sw, xws))
-                {
-                    xs.Serialize(xw, obj);
-                    xw.Flush();
-                    return sw.ToString();
-                }
-            }
-            catch
-            {
+            if (obj == null || !obj.GetType().IsSerializable)
                 return string.Empty;
+            XmlSerializer xs = new XmlSerializer(obj.GetType());
+            XmlWriterSettings xws = new XmlWriterSettings() { OmitXmlDeclaration = true };
+            using (StringWriter sw = new StringWriter())
+            using (XmlWriter xw = XmlWriter.Create(sw, xws))
+            {
+                xs.Serialize(xw, obj);
+                xw.Flush();
+                return sw.ToString();
             }
         }
 
