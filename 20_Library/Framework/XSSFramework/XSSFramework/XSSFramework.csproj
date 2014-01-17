@@ -63,7 +63,7 @@
     <Compile Include="Data\DataHelper.cs" />
     <Compile Include="Data\MySqlHelper.cs" />
     <Compile Include="IO\FileUtils.cs" />
-    <Compile Include="IO\PathUtils.cs" />
+    <Compile Include="IO\DirectoryUtils.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\LogLevelEnum.cs" />
     <Compile Include="Log\LogUtils.cs" />
