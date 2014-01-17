@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A6540F9A-0D0B-4194-A13A-B4B5B422172C}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{D4D025D6-7351-46FB-982F-48495BF2E777}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Committinger.XStrangerServic.Core</RootNamespace>
-    <AssemblyName>Committinger.XStrangerServic.Core</AssemblyName>
+    <RootNamespace>DBTest</RootNamespace>
+    <AssemblyName>DBTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,20 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\..\..\20_Library\build\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Extras.DynamicProxy2">
-      <HintPath>..\..\..\..\20_Library\build\Autofac.Extras.DynamicProxy2.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\..\..\20_Library\build\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\..\..\20_Library\build\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>..\..\..\..\20_Library\build\MySql.Data.dll</HintPath>
+      <HintPath>..\packages\MySql.Data.6.8.3\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,23 +42,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XSSFramework">
-      <HintPath>..\..\..\..\20_Library\build\XSSFramework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CircleModule.cs" />
-    <Compile Include="Model\Conversation.cs" />
-    <Compile Include="Model\Message.cs" />
-    <Compile Include="MessageModule.cs" />
-    <Compile Include="MessageType.cs" />
-    <Compile Include="Participant.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="UserModule.cs" />
-    <Compile Include="Model\Circle.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
