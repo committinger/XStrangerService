@@ -20,6 +20,6 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
         public string Description { get; set; }
 
         [DataMember(Name = "circle_images")]
-        public List<string> ImageUrlList { get; set; }
+        public string[] ImageUrls { get; set; }
     }
 }

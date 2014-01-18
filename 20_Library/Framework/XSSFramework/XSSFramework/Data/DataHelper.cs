@@ -63,5 +63,60 @@ namespace XSSFramework.Data
             }
             return ds;
         }
+
+        public virtual int InsertAndGetId(string sql, IEnumerable<DbParameter> parameterCollection)
+        {
+            DbConnection connection = GetConnection(DatabaseConfig.Instance.ConnectionString);
+            try
+            {
+                connection.Open();
+                using (DbCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    if (parameterCollection != null)
+                        foreach (var p in parameterCollection)
+                            cmd.Parameters.Add(p);
+                    if (cmd.ExecuteNonQuery() > 0)
+                    {
+                        DataSet ds = new DataSet();
+                        cmd.CommandText = "SELECT LAST_INSERT_ID()";
+                        DbDataAdapter adapter = GetDbDataAdapter(cmd);
+                        adapter.Fill(ds);
+                        return Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                try { connection.Close(); }
+                catch { }
+                throw ex;
+            }
+            return -1;
+        }
+
+        public virtual int Insert(string sql, IEnumerable<DbParameter> parameterCollection)
+        {
+            DbConnection connection = GetConnection(DatabaseConfig.Instance.ConnectionString);
+            try
+            {
+                connection.Open();
+                using (DbCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    if (parameterCollection != null)
+                        foreach (var p in parameterCollection)
+                            cmd.Parameters.Add(p);
+                    return cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                try { connection.Close(); }
+                catch { }
+                throw ex;
+            }
+            return -1;
+        }
     }
 }

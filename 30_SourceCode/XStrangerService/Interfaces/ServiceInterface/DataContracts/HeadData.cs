@@ -9,6 +9,18 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
     [DataContract(Namespace = ServiceContext.DATACONTRACT_NAMESPACE)]
     public class HeadData
     {
+        public HeadData()
+            : this("0", "SUCCESS")
+        {
+
+        }
+
+        public HeadData(string code, string description)
+        {
+            TimeStamp = DateTime.Now.Ticks.ToString();
+            this.Description = description;
+            this.Code = code;
+        }
         /// <summary>
         /// 时间戳
         /// </summary>

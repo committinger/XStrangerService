@@ -11,6 +11,9 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
     [DataContract(Namespace = ServiceContext.DATACONTRACT_NAMESPACE)]
     public class StructedResultData<T> : ResultData
     {
+        public StructedResultData() : base() { }
+        public StructedResultData(string code, string description) : base(code, description) { }
+
         [DataMember(Name = "body")]
         public T Body { get; set; }
 
