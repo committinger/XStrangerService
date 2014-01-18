@@ -13,6 +13,8 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
         [DataMember(Name = "sequence")]
         public int Sequence { get; set; }
 
+        public string UserFrom { get; set; }
+
         [DataMember(Name = "message")]
         public List<MessageData> MessageList { get; set; }
     }

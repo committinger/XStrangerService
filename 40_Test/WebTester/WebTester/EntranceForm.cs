@@ -134,6 +134,7 @@ namespace WebTester
             {
                 if (e != null)
                 {
+
                     this.tbGetResponse.Text = e.Result.ToString();
                 }
             }
@@ -189,6 +190,7 @@ namespace WebTester
             {
                 setStateBusy();
                 client = new WebClient();
+                client.Encoding = Encoding.UTF8;
                 string url = tbUrl.Text;
                 string data = tbPostRequest.Text;
                 client.UploadStringCompleted += client_PostCompleted;
@@ -210,6 +212,7 @@ namespace WebTester
             {
                 setStateBusy();
                 client = new WebClient();
+                client.Encoding = Encoding.UTF8;
                 client.DownloadStringCompleted += client_GetCompleted;
                 string url = tbUrl.Text;
                 client.DownloadStringAsync(new Uri(url));

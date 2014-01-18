@@ -64,68 +64,74 @@ namespace Committinger.XStrangerServic.ServiceImplementation
 
         public StructedResultData<MessageCollectionData> SyncMessage(string req_timestamp, string req_client_platform, string req_client_version, MessageCollectionData messageCollection)
         {
-            StructedResultData<MessageCollectionData> result = new StructedResultData<MessageCollectionData>()
+            MessageCollectionData result = MessageModule.Instance.Process(messageCollection);
+            return new StructedResultData<MessageCollectionData>()
             {
-                Head = new HeadData()
-                {
-                    Code = "0",
-                    Description = "Success. hello, " + req_timestamp + "," + req_client_platform + "," + req_client_version,
-                    TimeStamp = DateTime.Now.Ticks.ToString()
-                },
-                Body = new MessageCollectionData()
-                {
-                    Sequence = messageCollection.Sequence + 10000,
-                    MessageList = new List<MessageData>()
-                }
+                Body = result
             };
-            messageCollection.MessageList.Add(new MessageData()
-            {
-                Content = "你好，我们正在聊天BASE",
-                MessageType = 0,
-                Time = DateTime.Now.Subtract(new TimeSpan(0, 0, 5)).ToString("yyyy-MM-dd HH:mm:ss +0800"),
-                UserTo = "someoneelse"
-            });
-            switch (messageCollection.Sequence % 10)
-            {
-                case 1:
-                    messageCollection.MessageList.Insert(0, new MessageData()
-                    {
-                        Content = "",
-                        MessageType = 1,
-                        Time = DateTime.Now.Subtract(new TimeSpan(0, 0, 30)).ToString("yyyy-MM-dd HH:mm:ss +0800"),
-                        UserTo = "someoneelse"
-                    });
-                    break;
-                case 2:
-                    messageCollection.MessageList.Add(new MessageData()
-                    {
-                        Content = "",
-                        MessageType = 2,
-                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
-                        UserTo = "someoneelse"
-                    });
-                    break;
-                case 5:
-                    messageCollection.MessageList.Add(new MessageData()
-                    {
-                        Content = "",
-                        MessageType = 5,
-                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
-                        UserTo = "someoneelse"
-                    });
-                    break;
-                default:
-                    messageCollection.MessageList.Add(new MessageData()
-                    {
-                        Content = "你好，我们正在聊天CASE0",
-                        MessageType = 0,
-                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
-                        UserTo = "someoneelse"
-                    });
-                    break;
-            }
 
-            return result;
+            //StructedResultData<MessageCollectionData> result = new StructedResultData<MessageCollectionData>()
+            //{
+            //    Head = new HeadData()
+            //    {
+            //        Code = "0",
+            //        Description = "Success. hello, " + req_timestamp + "," + req_client_platform + "," + req_client_version,
+            //        TimeStamp = DateTime.Now.Ticks.ToString()
+            //    },
+            //    Body = new MessageCollectionData()
+            //    {
+            //        Sequence = messageCollection.Sequence + 10000,
+            //        MessageList = new List<MessageData>()
+            //    }
+            //};
+            //messageCollection.MessageList.Add(new MessageData()
+            //{
+            //    Content = "你好，我们正在聊天BASE",
+            //    MessageType = 0,
+            //    Time = DateTime.Now.Subtract(new TimeSpan(0, 0, 5)).ToString("yyyy-MM-dd HH:mm:ss +0800"),
+            //    UserTo = "someoneelse"
+            //});
+            //switch (messageCollection.Sequence % 10)
+            //{
+            //    case 1:
+            //        messageCollection.MessageList.Insert(0, new MessageData()
+            //        {
+            //            Content = "",
+            //            MessageType = 1,
+            //            Time = DateTime.Now.Subtract(new TimeSpan(0, 0, 30)).ToString("yyyy-MM-dd HH:mm:ss +0800"),
+            //            UserTo = "someoneelse"
+            //        });
+            //        break;
+            //    case 2:
+            //        messageCollection.MessageList.Add(new MessageData()
+            //        {
+            //            Content = "",
+            //            MessageType = 2,
+            //            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
+            //            UserTo = "someoneelse"
+            //        });
+            //        break;
+            //    case 5:
+            //        messageCollection.MessageList.Add(new MessageData()
+            //        {
+            //            Content = "",
+            //            MessageType = 5,
+            //            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
+            //            UserTo = "someoneelse"
+            //        });
+            //        break;
+            //    default:
+            //        messageCollection.MessageList.Add(new MessageData()
+            //        {
+            //            Content = "你好，我们正在聊天CASE0",
+            //            MessageType = 0,
+            //            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
+            //            UserTo = "someoneelse"
+            //        });
+            //        break;
+            //}
+
+            //return result;
         }
     }
 }

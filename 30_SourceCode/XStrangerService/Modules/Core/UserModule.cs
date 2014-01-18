@@ -14,7 +14,7 @@ namespace Committinger.XStrangerServic.Core
     [Intercept(typeof(Logger))]
     public class UserModule
     {
-         static UserModule()
+        static UserModule()
         {
             _pool = new Dictionary<string, User>();
             _timedOutCheckTimer = new Timer(timedOutCheckIntervalSec * 1000);
@@ -50,7 +50,7 @@ namespace Committinger.XStrangerServic.Core
             User user = new User()
             {
                 Available = true,
-                Name = new Guid().ToString("N")
+                Name = Guid.NewGuid().ToString("N")
             };
             Pool.Add(user.Name, user);
             return user;
@@ -77,6 +77,15 @@ namespace Committinger.XStrangerServic.Core
             }
             return Instance.Register();
 
+        }
+
+        public virtual User GetRandomUser()
+        {
+            List<User> users = Pool.Values.Where(t => t.Available).ToList();
+            User user = users[new Random(DateTime.Now.Millisecond).Next(users.Count())];
+            if (user.Available)
+                return user;
+            return null;
         }
 
     }

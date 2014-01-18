@@ -9,25 +9,35 @@ namespace Committinger.XStrangerServic.Core
 {
     public class Conversation
     {
-        public Conversation(User starter, User acceptor)
+        public Conversation(User originator, User recipient, int timedOutSec)
         {
-            this._starter = starter;
-            this._acceptor = acceptor;
-            this._timer.Interval = 12000;
-            this._timer.Elapsed += _timer_Elapsed;
+            originator.Available = false;
+            recipient.Available = false;
+            this.Originator = originator;
+            this.Recipient = recipient;
+            this.OriginatorOpen = true;
+            this.RecipientOpen = false;
+            this.Timer.Interval = timedOutSec * 1000;
+            this.Timer.Elapsed += _timer_Elapsed;
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            this._timer.Elapsed -= _timer_Elapsed;
-            //CreateMessage
+            this.Timer.Elapsed -= _timer_Elapsed;
+            if (this.BreakAction != null)
+                this.BreakAction.Invoke(this);
         }
 
-        private User _starter { get; set; }
-        private User _acceptor { get; set; }
-        private Timer _timer { get; set; }
+        public Action<Conversation> BreakAction;
 
-        public List<Message> _messageList { get; set; }
+        public string Key { get { return Originator.Name + Recipient.Name; } }
+
+        public User Originator { get; set; }
+        public User Recipient { get; set; }
+        public Timer Timer { get; set; }
+        public bool OriginatorOpen { get; set; }
+        public bool RecipientOpen { get; set; }
+        public bool ConversationOpen { get { return OriginatorOpen && RecipientOpen; } }
 
     }
 }

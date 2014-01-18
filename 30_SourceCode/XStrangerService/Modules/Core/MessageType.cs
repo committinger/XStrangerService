@@ -8,8 +8,9 @@ namespace Committinger.XStrangerServic.Core
 {
     public class MessageType
     {
+        public const int HeartBeat = -1;
         public const int Normal = 0;
-        public const int BeInvited = 1;
+        public const int Invite = 1;
         public const int BeRejected = 2;
         public const int Reject = 3;
         public const int Accept = 4;
