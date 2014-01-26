@@ -11,14 +11,9 @@ namespace Committinger.XStrangerServic.Core
     {
         public Conversation(User originator, User recipient, int timedOutSec)
         {
-            originator.Available = false;
-            recipient.Available = false;
             this.Originator = originator;
             this.Recipient = recipient;
-            this.OriginatorOpen = true;
-            this.RecipientOpen = false;
-            this.Timer.Interval = timedOutSec * 1000;
-            this.Timer.Elapsed += _timer_Elapsed;
+            this.Timer = new Timer(timedOutSec * 1000);
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -39,5 +34,14 @@ namespace Committinger.XStrangerServic.Core
         public bool RecipientOpen { get; set; }
         public bool ConversationOpen { get { return OriginatorOpen && RecipientOpen; } }
 
+
+        internal void Initial()
+        {
+            Originator.Available = false;
+            Recipient.Available = false;
+            OriginatorOpen = true;
+            RecipientOpen = false;
+            this.Timer.Elapsed += _timer_Elapsed;
+        }
     }
 }

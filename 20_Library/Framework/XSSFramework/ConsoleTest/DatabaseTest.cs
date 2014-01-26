@@ -60,7 +60,7 @@ namespace ConsoleTest
             IEnumerable<DbParameter> parameterList = new List<MySqlParameter>(){
             new MySqlParameter("@name", MySqlDbType.String) { Value = "三号线" },
             new MySqlParameter("@keywords", MySqlDbType.String) { Value = "metro,subway,江杨北路,上海南站" },
-            new MySqlParameter("@description", MySqlDbType.String) { Value = "三号线是一条贯穿南北的高架线路" },
+            new MySqlParameter("@description", MySqlDbType.String) { Value = "中文中文" },
             new MySqlParameter("@iconUrl", MySqlDbType.String) { Value = "www.baidu.com" },
             new MySqlParameter("@imageUrls", MySqlDbType.String) { Value = "www.google.com,www.google.com" }
             };

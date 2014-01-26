@@ -1,6 +1,6 @@
 ﻿using Autofac.Extras.DynamicProxy2;
 using Committinger.XStrangerServic.Core.DA;
-using Committinger.XStrangerServic.Core.Handler;
+using Committinger.XStrangerServic.Core.MessageHandler;
 using Committinger.XStrangerService.ServiceInterface.DataContracts;
 using System;
 using System.Collections.Generic;
@@ -21,8 +21,8 @@ namespace Committinger.XStrangerServic.Core
         public virtual MessageCollectionData Process(MessageCollectionData messageCollection)
         {
 
-            MessageData data = MessageHandler.PreProcess(messageCollection);
-            var handler = MessageHandler.CreateHandler(data.MessageType);
+            MessageData data = BaseMessageHandler.PreProcess(messageCollection);
+            var handler = BaseMessageHandler.CreateHandler(data.MessageType);
             return handler.HandleMessage(data, messageCollection.Sequence);
         }
 
@@ -139,9 +139,9 @@ namespace Committinger.XStrangerServic.Core
         private string buildContent(int msgType)
         {
             if (msgType == MessageType.Invite)
-                return "您已被邀请参与会话";
+                return "you are invited to an conversation";
             if (msgType == MessageType.BeRejected)
-                return "您的请求被对方拒绝";
+                return "your invitation is rejected";
             return string.Empty;
         }
     }

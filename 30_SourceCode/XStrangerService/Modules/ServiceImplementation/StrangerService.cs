@@ -36,102 +36,81 @@ namespace Committinger.XStrangerServic.ServiceImplementation
         /// <param name="circle_key"></param>
         /// <param name="user_name"></param>
         /// <returns></returns>
-        public StructedResultData<CircleData> RetrieveCircle(string req_timestamp, string req_client_platform, string req_client_version, string circle_key, string user_name)
+        public StructedResultData<CircleBodyData> RetrieveCircle(string req_timestamp, string req_client_platform, string req_client_version, string circle_key, string user_name)
         {
+            StringBuilder sb = new StringBuilder("查询圈子");
+            sb.AppendLine("req_timestamp：" + req_timestamp);
+            sb.AppendLine("req_client_platform：" + req_client_platform);
+            sb.AppendLine("req_client_version：" + req_client_version);
+            sb.AppendLine("circle_key：" + circle_key);
+            sb.AppendLine("user_name：" + user_name);
+            LogUtils.Debug(sb);
             /**
              *  1、注册用户 
              *  2、取出圈子
              *  3、设置该用户在圈子中* 
              *  
              */
-            User user = UserModule.Instance.GetUserByName(user_name);
-            Circle circle = CircleDA.Instance.GetCircleByKey(circle_key);
 
-            if (circle == null)
+            try
             {
-                LogUtils.AsyncDebug(new StringBuilder("未能根据关键字找到对应的圈子：").Append(circle_key));
-                return new StructedResultData<CircleData>("-1", "未能根据关键字找到对应的圈子");
+                if (string.IsNullOrEmpty(circle_key))
+                {
+                    UserModule.Instance.DeleteUserByName(user_name);
+                    return new StructedResultData<CircleBodyData>("0", "离开社区成功")
+                    {
+                        Body = new CircleBodyData()
+                    };
+                }
+
+                User user = UserModule.Instance.GetOrRegisterUserByName(user_name);
+                Circle circle = CircleDA.Instance.GetCircleByKey(circle_key);
+                if (circle == null)
+                {
+                    LogUtils.AsyncDebug(new StringBuilder("未能根据关键字找到对应的圈子：").Append(circle_key));
+                    return new StructedResultData<CircleBodyData>("-1", "未能根据关键字找到对应的圈子")
+                    {
+                        Body = new CircleBodyData()
+                    };
+                }
+
+                //user.In = circle;
+                //user.Available = true;
+
+                StructedResultData<CircleBodyData> result = new StructedResultData<CircleBodyData>();
+                result.Body = new CircleBodyData()
+                {
+                    Circle = circle.Body,
+                    UserName = user.Name
+                };
+
+                return result;
             }
-
-            user.In = circle;
-            user.Available = true;
-
-            StructedResultData<CircleData> result = new StructedResultData<CircleData>();
-            result.Body = circle.Body;
-            result.UserName = user.Name;
-            return result;
+            catch (Exception ex)
+            {
+                LogUtils.Error("发生异常", ex);
+            }
+            return new StructedResultData<CircleBodyData>("-1", "发生异常")
+            {
+                Body = new CircleBodyData()
+            };
         }
 
         public StructedResultData<MessageCollectionData> SyncMessage(string req_timestamp, string req_client_platform, string req_client_version, MessageCollectionData messageCollection)
         {
-            MessageCollectionData result = MessageModule.Instance.Process(messageCollection);
-            return new StructedResultData<MessageCollectionData>()
+            try
             {
-                Body = result
-            };
-
-            //StructedResultData<MessageCollectionData> result = new StructedResultData<MessageCollectionData>()
-            //{
-            //    Head = new HeadData()
-            //    {
-            //        Code = "0",
-            //        Description = "Success. hello, " + req_timestamp + "," + req_client_platform + "," + req_client_version,
-            //        TimeStamp = DateTime.Now.Ticks.ToString()
-            //    },
-            //    Body = new MessageCollectionData()
-            //    {
-            //        Sequence = messageCollection.Sequence + 10000,
-            //        MessageList = new List<MessageData>()
-            //    }
-            //};
-            //messageCollection.MessageList.Add(new MessageData()
-            //{
-            //    Content = "你好，我们正在聊天BASE",
-            //    MessageType = 0,
-            //    Time = DateTime.Now.Subtract(new TimeSpan(0, 0, 5)).ToString("yyyy-MM-dd HH:mm:ss +0800"),
-            //    UserTo = "someoneelse"
-            //});
-            //switch (messageCollection.Sequence % 10)
-            //{
-            //    case 1:
-            //        messageCollection.MessageList.Insert(0, new MessageData()
-            //        {
-            //            Content = "",
-            //            MessageType = 1,
-            //            Time = DateTime.Now.Subtract(new TimeSpan(0, 0, 30)).ToString("yyyy-MM-dd HH:mm:ss +0800"),
-            //            UserTo = "someoneelse"
-            //        });
-            //        break;
-            //    case 2:
-            //        messageCollection.MessageList.Add(new MessageData()
-            //        {
-            //            Content = "",
-            //            MessageType = 2,
-            //            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
-            //            UserTo = "someoneelse"
-            //        });
-            //        break;
-            //    case 5:
-            //        messageCollection.MessageList.Add(new MessageData()
-            //        {
-            //            Content = "",
-            //            MessageType = 5,
-            //            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
-            //            UserTo = "someoneelse"
-            //        });
-            //        break;
-            //    default:
-            //        messageCollection.MessageList.Add(new MessageData()
-            //        {
-            //            Content = "你好，我们正在聊天CASE0",
-            //            MessageType = 0,
-            //            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss +0800"),
-            //            UserTo = "someoneelse"
-            //        });
-            //        break;
-            //}
-
-            //return result;
+                MessageCollectionData result = MessageModule.Instance.Process(messageCollection);
+                return new StructedResultData<MessageCollectionData>()
+                {
+                    Body = result
+                };
+            }
+            catch (Exception ex)
+            {
+                LogUtils.Error("发生异常", ex);
+            }
+            return new StructedResultData<MessageCollectionData>("-1", "发生异常");
         }
     }
 }

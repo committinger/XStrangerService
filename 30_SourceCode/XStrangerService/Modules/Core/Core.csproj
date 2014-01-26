@@ -62,15 +62,15 @@
     <Compile Include="DA\CircleDA.cs" />
     <Compile Include="DA\MessageDA.cs" />
     <Compile Include="DA\UserDA.cs" />
-    <Compile Include="Handler\MessageHandler.cs" />
-    <Compile Include="Handler\NormalMessageHandler.cs" />
-    <Compile Include="Handler\AcceptMessageHandler.cs" />
-    <Compile Include="Handler\HeartBeatMessageHandler.cs">
+    <Compile Include="MessageHandler\BaseMessageHandler.cs" />
+    <Compile Include="MessageHandler\NormalMessageHandler.cs" />
+    <Compile Include="MessageHandler\AcceptMessageHandler.cs" />
+    <Compile Include="MessageHandler\HeartBeatMessageHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Handler\RejectMessageHandler.cs" />
-    <Compile Include="Handler\EndMessageHandler.cs" />
-    <Compile Include="Handler\ContinueMessageHandler.cs" />
+    <Compile Include="MessageHandler\RejectMessageHandler.cs" />
+    <Compile Include="MessageHandler\EndMessageHandler.cs" />
+    <Compile Include="MessageHandler\ContinueMessageHandler.cs" />
     <Compile Include="Model\Conversation.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="MessageModule.cs" />

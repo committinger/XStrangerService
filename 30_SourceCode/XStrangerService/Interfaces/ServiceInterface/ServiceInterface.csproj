@@ -48,6 +48,7 @@
     <Compile Include="DataContracts\MessageData.cs" />
     <Compile Include="DataContracts\ResultData.cs" />
     <Compile Include="DataContracts\StructedResultData.cs" />
+    <Compile Include="DataContracts\CircleBodyData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContext.cs" />
     <Compile Include="ServiceContracts\IStrangerService.cs" />

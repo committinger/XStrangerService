@@ -10,6 +10,13 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
     [DataContract(Namespace = ServiceContext.DATACONTRACT_NAMESPACE)]
     public class CircleData
     {
+        public CircleData()
+        {
+            Name = string.Empty;
+            IconUrl = string.Empty;
+            Description = string.Empty;
+            ImageUrls = new string[] { };
+        }
         [DataMember(Name = "circle_name")]
         public string Name { get; set; }
 

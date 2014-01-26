@@ -20,7 +20,7 @@ namespace XSSFramework.Log
         private const string ConstantMessage = "Message：";
         private const string ConstantException = "Exception capture：";
         private const string ConstantStacktrace = "Stacktrace：";
-
+        private const string ConstantLineSplitter = "======================================================";
         private const string ConstantLogPath = @"logs\";
         private const string ConstantLogPathLogFileDateFormat = "yyyyMMdd";
         private const string ConstantLogPathLogDot = ".";
@@ -69,7 +69,7 @@ namespace XSSFramework.Log
 
         private static void WriteLog(object message, string level)
         {
-            StringBuilder logBuilder = new StringBuilder().AppendLine();
+            StringBuilder logBuilder = new StringBuilder(ConstantLineSplitter).AppendLine();
             logBuilder.Append(DateTime.Now.ToString(ConstantDateTimeFormat)).Append(ConstantSplitString).Append(level).AppendLine();
             logBuilder.AppendLine(message == null ? ConstantNullString : message.ToString());
             FileUtils.ThreadsafeAppendText(GetLogFileFullPath(), logBuilder.ToString());

@@ -12,6 +12,7 @@ namespace Committinger.XStrangerServic.Core
     {
         public User()
         {
+            Available = true;
             _lastActiveTime = DateTime.Now;
         }
 

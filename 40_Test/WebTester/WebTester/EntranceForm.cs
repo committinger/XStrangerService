@@ -194,6 +194,7 @@ namespace WebTester
                 string url = tbUrl.Text;
                 string data = tbPostRequest.Text;
                 client.UploadStringCompleted += client_PostCompleted;
+                client.Headers.Add("Content-Type", "application/json");
                 client.UploadStringAsync(new Uri(url), data);
             }
             catch (Exception ex)

@@ -17,7 +17,5 @@ namespace Committinger.XStrangerService.ServiceInterface.DataContracts
         [DataMember(Name = "body")]
         public T Body { get; set; }
 
-        [DataMember(Name = "user_name")]
-        public string UserName { get; set; }
     }
 }

@@ -27,16 +27,21 @@ namespace XSSFramework.Serialize
 
         public static string SerializeData(object obj)
         {
-            if (obj == null || !obj.GetType().IsSerializable)
-                return string.Empty;
-            XmlSerializer xs = new XmlSerializer(obj.GetType());
-            XmlWriterSettings xws = new XmlWriterSettings() { OmitXmlDeclaration = true };
-            using (StringWriter sw = new StringWriter())
-            using (XmlWriter xw = XmlWriter.Create(sw, xws))
+            try
             {
-                xs.Serialize(xw, obj);
-                xw.Flush();
-                return sw.ToString();
+                XmlSerializer xs = new XmlSerializer(obj.GetType());
+                XmlWriterSettings xws = new XmlWriterSettings() { OmitXmlDeclaration = true };
+                using (StringWriter sw = new StringWriter())
+                using (XmlWriter xw = XmlWriter.Create(sw, xws))
+                {
+                    xs.Serialize(xw, obj);
+                    xw.Flush();
+                    return sw.ToString();
+                }
+            }
+            catch
+            {
+                return string.Empty;
             }
         }
 

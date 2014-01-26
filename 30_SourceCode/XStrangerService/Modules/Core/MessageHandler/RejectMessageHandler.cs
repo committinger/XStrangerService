@@ -7,18 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using XSSFramework.Log;
 
-namespace Committinger.XStrangerServic.Core.Handler
+namespace Committinger.XStrangerServic.Core.MessageHandler
 {
     [Intercept(typeof(Logger))]
-    class EndMessageHandler : MessageHandler
+    public class RejectMessageHandler : BaseMessageHandler
     {
         protected override void DoHandleMessage(MessageData message, int sequence)
         {
             User sender = UserModule.Instance.GetUserByName(message.UserFrom);
-            Conversation c = ConversationModule.Instance.GetConversation(sender);
-            ConversationModule.Instance.StopConveration(c);
-            MessageModule.Instance.CreateEndMessage(c);
-            ConversationModule.Instance.RemoveConveration(c);
+            if (sender != null)
+            {
+                Conversation c = ConversationModule.Instance.GetConversation(sender);
+                MessageModule.Instance.CreateRejectMessage(c);
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿<DatabaseConfig>
   <Type>MySql</Type>
   <ConnectionString>
-    <![CDATA[Server=192.168.1.100;Port=3306;Database=test;Uid=narcissusdu;Pwd=wz1986ns`]]>
+    <![CDATA[Server=192.168.1.100;Port=3306;Database=test;Uid=narcissusdu;Pwd=wz1986ns`;Character Set=utf8]]>
   </ConnectionString>
 </DatabaseConfig>

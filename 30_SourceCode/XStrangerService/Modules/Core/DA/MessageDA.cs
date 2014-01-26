@@ -52,7 +52,8 @@ namespace Committinger.XStrangerServic.Core.DA
             var helper = DataHelper.CreateHelper();
             StringBuilder sqlBuilder = new StringBuilder();
             sqlBuilder.Append(" select * from T_MESSAGE");
-            sqlBuilder.Append(" where recid>@sequence and (T_MESSAGE.from = @user or T_MESSAGE.to=@user)");
+            sqlBuilder.Append(" where recid>@sequence and T_MESSAGE.to=@user");
+            //sqlBuilder.Append(" where recid>@sequence and (T_MESSAGE.from = @user or T_MESSAGE.to=@user)");
             sqlBuilder.Append(" order by recid");
             List<MySqlParameter> parameterList = new List<MySqlParameter>();
             parameterList.Add(new MySqlParameter("@sequence", MySqlDbType.Int32) { Value = sequence });
@@ -70,9 +71,10 @@ namespace Committinger.XStrangerServic.Core.DA
                             UserFrom = Convert.ToString(row["from"]),
                             Content = Convert.ToString(row["content"]),
                             MessageType = Convert.ToInt32(row["type"]),
-                            Time = Convert.ToDateTime(row["forwardertime"]).ToString("yyyy-MM-dd HH:mm:ss +0800")
+                            Time = Convert.ToDateTime(row["forwardtime"]).ToString("yyyy-MM-dd HH:mm:ss +0800")
                         };
                         data.MessageList.Add(msg);
+                        data.Sequence = msg.sequence;
                     }
                 }
             return data;

@@ -17,6 +17,8 @@ namespace Committinger.XStrangerServic.Core
         static UserModule()
         {
             _pool = new Dictionary<string, User>();
+            //_pool.Add("AAA", new User() { Name = "AAA", Available = true });
+            //_pool.Add("BBB", new User() { Name = "BBB", Available = true });
             _timedOutCheckTimer = new Timer(timedOutCheckIntervalSec * 1000);
             _timedOutCheckTimer.AutoReset = true;
             _timedOutCheckTimer.Elapsed += _timedOutCheckTimer_Elapsed;
@@ -56,7 +58,7 @@ namespace Committinger.XStrangerServic.Core
             return user;
         }
 
-        public virtual User GetUserByName(string user_name)
+        public virtual User GetOrRegisterUserByName(string user_name)
         {
             if (string.IsNullOrEmpty(user_name))
                 return Instance.Register();
@@ -79,14 +81,54 @@ namespace Committinger.XStrangerServic.Core
 
         }
 
-        public virtual User GetRandomUser()
+        public virtual User GetUserByName(string user_name)
         {
-            List<User> users = Pool.Values.Where(t => t.Available).ToList();
+            if (!string.IsNullOrEmpty(user_name) && Pool.ContainsKey(user_name))
+            {
+                try
+                {
+                    User user = Pool[user_name];
+                    user.HeartBeat();
+                    if (Pool.ContainsKey(user_name))
+                        return user;
+                }
+                catch (Exception ex)
+                {
+                    LogUtils.Error(ex);
+                }
+            }
+            return null;
+
+        }
+
+        public virtual User GetRandomUser(string exclude)
+        {
+            List<User> users = Pool.Values.Where(t => (t.Available && !string.Equals(exclude, t.Name))).ToList();
+            if (users.Count <= 0)
+                return null;
             User user = users[new Random(DateTime.Now.Millisecond).Next(users.Count())];
             if (user.Available)
                 return user;
             return null;
         }
 
+
+        public virtual void DeleteUserByName(string user_name)
+        {
+            User u = UserModule.Instance.GetUserByName(user_name);
+            if (u == null)
+                return;
+            Conversation c = ConversationModule.Instance.GetConversation(u);
+            if (c != null)
+                ConversationModule.Instance.RemoveConveration(c);
+            UserModule.Instance.Remove(u);
+        }
+
+        public virtual void Remove(User u)
+        {
+            u.Available = false;
+            if (Pool.ContainsKey(u.Name))
+                Pool.Remove(u.Name);
+        }
     }
 }

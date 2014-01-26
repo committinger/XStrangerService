@@ -7,14 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using XSSFramework.Log;
 
-namespace Committinger.XStrangerServic.Core.Handler
+namespace Committinger.XStrangerServic.Core.MessageHandler
 {
     [Intercept(typeof(Logger))]
-    class HeartBeatMessageHandler : MessageHandler
+    public class HeartBeatMessageHandler : BaseMessageHandler
     {
         protected override void DoHandleMessage(MessageData message, int sequence)
         {
-            UserModule.Instance.GetUserByName(message.UserFrom).HeartBeat();
+            User u = UserModule.Instance.GetUserByName(message.UserFrom);
+            if (u != null) u.HeartBeat();
         }
     }
 }

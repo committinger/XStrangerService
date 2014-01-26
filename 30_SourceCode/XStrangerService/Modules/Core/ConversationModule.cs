@@ -23,47 +23,73 @@ namespace Committinger.XStrangerServic.Core
         private static Dictionary<string, Conversation> _pool;
         public static Dictionary<string, Conversation> Pool { get { return _pool; } }
 
-        public virtual Conversation StartNewConversation(User originator, User recipient)
+        public virtual void StartNewConversation(User originator, User recipient)
         {
-            if (!Pool.ContainsKey(originator.Name + recipient.Name))
+            if (originator.Name != recipient.Name)
+            {
+                if (Pool.ContainsKey(originator.Name))
+                {
+                    Pool.Remove(originator.Name);
+                }
+
+                if (Pool.ContainsKey(recipient.Name))
+                {
+                    Pool.Remove(recipient.Name);
+                }
+
                 lock (_lockObj)
                 {
                     Conversation c = new Conversation(originator, recipient, ConstantTimedOutSec);
 
-                    if (!Pool.ContainsKey(originator.Name + recipient.Name))
+                    if (!Pool.ContainsKey(originator.Name) && !Pool.ContainsKey(recipient.Name))
                     {
                         Pool.Add(originator.Name, c);
                         Pool.Add(recipient.Name, c);
+                        c.Initial();
                         c.BreakAction = MessageModule.CreateBreakMessageAction;
                     }
                 }
-            MessageModule.Instance.CreateInviteMessage(Pool[originator.Name + recipient.Name]);
-            return Pool[originator.Name + recipient.Name];
+
+                MessageModule.Instance.CreateInviteMessage(Pool[originator.Name]);
+                //return Pool[originator.Name + recipient.Name];
+            }
+            //return null;
         }
 
         public virtual Conversation GetConversation(User user)
         {
-            string key = Array.Find(Pool.Keys.ToArray(), t => string.Equals(t, user.Name));
-            if (Pool.ContainsKey(key))
+            if (user != null)
             {
-                return Pool[key];
+                string key = Array.Find(Pool.Keys.ToArray(), t => string.Equals(t, user.Name));
+                if (!string.IsNullOrEmpty(key) && Pool.ContainsKey(key))
+                {
+                    return Pool[key];
+                }
             }
             return null;
         }
 
         public virtual void RemoveConveration(Conversation c)
         {
-            Pool.Remove(c.Originator.Name);
-            Pool.Remove(c.Recipient.Name);
-            c.Originator.Available = true;
-            c.Recipient.Available = true;
+            if (c != null)
+            {
+                if (c.Originator != null && string.IsNullOrEmpty(c.Originator.Name) && Pool.ContainsKey(c.Originator.Name))
+                    Pool.Remove(c.Originator.Name);
+                if (c.Recipient != null && string.IsNullOrEmpty(c.Recipient.Name) && Pool.ContainsKey(c.Recipient.Name))
+                    Pool.Remove(c.Recipient.Name);
+                c.Originator.Available = true;
+                c.Recipient.Available = true;
+            }
         }
 
         public virtual void StopConveration(Conversation c)
         {
-            c.OriginatorOpen = false;
-            c.RecipientOpen = false;
-            c.BreakAction = null;
+            if (c != null)
+            {
+                c.OriginatorOpen = false;
+                c.RecipientOpen = false;
+                c.BreakAction = null;
+            }
         }
 
         public virtual void ContinueConveration(Conversation c, User user)
