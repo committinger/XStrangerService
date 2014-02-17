@@ -28,7 +28,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                     cb.Register(c => ModuleInjector.Inject<AcceptMessageHandler>()).Named<BaseMessageHandler>(MessageType.Accept.ToString());
                     cb.Register(c => ModuleInjector.Inject<RejectMessageHandler>()).Named<BaseMessageHandler>(MessageType.Reject.ToString());
                     cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
-                    cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
+                    //cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
                     cb.Register(c => ModuleInjector.Inject<HeartBeatMessageHandler>()).Named<BaseMessageHandler>(MessageType.HeartBeat.ToString());
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
@@ -80,19 +80,22 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
 
 
 
-        public static MessageData PreProcess(MessageCollectionData messageCollection)
+        public static List<MessageData> PreProcess(MessageCollectionData messageCollection)
         {
-            MessageData msg;
+            List<MessageData> msgList = new List<MessageData>();
+
             if (messageCollection.MessageList != null && messageCollection.MessageList.Count > 0)
             {
-                msg = messageCollection.MessageList[0];
-                msg.UserFrom = messageCollection.UserFrom;
+                msgList = messageCollection.MessageList;
+                if (msgList != null)
+                    msgList.ForEach(t => t.UserFrom = messageCollection.UserFrom);
             }
             else
             {
-                msg = BuildHeartbeatMessage(messageCollection);
+                msgList.Add(BuildHeartbeatMessage(messageCollection));
             }
-            return msg;
+
+            return msgList;
         }
         private static MessageData BuildHeartbeatMessage(MessageCollectionData messageCollection)
         {

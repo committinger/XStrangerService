@@ -43,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContracts\CircleData.cs" />
+    <Compile Include="DataContracts\ConversationControlData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DataContracts\HeadData.cs" />
     <Compile Include="DataContracts\MessageCollectionData.cs" />
     <Compile Include="DataContracts\MessageData.cs" />

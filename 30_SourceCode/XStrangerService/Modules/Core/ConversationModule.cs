@@ -11,7 +11,8 @@ namespace Committinger.XStrangerServic.Core
     [Intercept(typeof(Logger))]
     public class ConversationModule
     {
-        public const int ConstantTimedOutSec = 120;
+        public const int ConstantPeriodMinSec = 30;
+        public const int ConstantPeriodMaxSec = 60;
         static ConversationModule()
         {
             _pool = new Dictionary<string, Conversation>();
@@ -39,14 +40,14 @@ namespace Committinger.XStrangerServic.Core
 
                 lock (_lockObj)
                 {
-                    Conversation c = new Conversation(originator, recipient, ConstantTimedOutSec);
+                    Conversation c = new Conversation(originator, recipient);
 
                     if (!Pool.ContainsKey(originator.Name) && !Pool.ContainsKey(recipient.Name))
                     {
                         Pool.Add(originator.Name, c);
                         Pool.Add(recipient.Name, c);
                         c.Initial();
-                        c.BreakAction = MessageModule.CreateBreakMessageAction;
+                        //c.BreakAction = MessageModule.CreateBreakMessageAction;
                     }
                 }
 

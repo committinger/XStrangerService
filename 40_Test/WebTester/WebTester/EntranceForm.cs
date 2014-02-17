@@ -193,6 +193,7 @@ namespace WebTester
                 client.Encoding = Encoding.UTF8;
                 string url = tbUrl.Text;
                 string data = tbPostRequest.Text;
+                //string data = Encoding.UTF8.GetString(Encoding.Unicode.GetBytes(tbPostRequest.Text));
                 client.UploadStringCompleted += client_PostCompleted;
                 client.Headers.Add("Content-Type", "application/json");
                 client.UploadStringAsync(new Uri(url), data);

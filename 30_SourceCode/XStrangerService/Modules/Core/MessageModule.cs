@@ -20,55 +20,68 @@ namespace Committinger.XStrangerServic.Core
 
         public virtual MessageCollectionData Process(MessageCollectionData messageCollection)
         {
+            MessageCollectionData collectionData = new MessageCollectionData()
+            {
+                MessageList = new List<MessageData>()
+            };
 
-            MessageData data = BaseMessageHandler.PreProcess(messageCollection);
-            var handler = BaseMessageHandler.CreateHandler(data.MessageType);
-            return handler.HandleMessage(data, messageCollection.Sequence);
+            List<MessageData> dataList = BaseMessageHandler.PreProcess(messageCollection);
+
+            dataList.ForEach(t =>
+            {
+                var handler = BaseMessageHandler.CreateHandler(t.MessageType);
+                MessageCollectionData tmpCollection = handler.HandleMessage(t, messageCollection.Sequence);
+                collectionData.Sequence = tmpCollection.Sequence;
+                collectionData.UserFrom = tmpCollection.UserFrom;
+                collectionData.MessageList.AddRange(tmpCollection.MessageList);
+            });
+
+            return collectionData;
         }
 
         private static object _lockObj = new object();
-        private static Action<Conversation> _createBreakMessageAction;
-        public static Action<Conversation> CreateBreakMessageAction
-        {
-            get
-            {
-                if (_createBreakMessageAction == null)
-                {
-                    lock (_lockObj)
-                    {
-                        Action<Conversation> tempAction = t =>
-                        {
-                            if (t != null && t.Originator != null && t.Recipient != null)
-                            {
-                                MessageData msg1 = new MessageData()
-                                {
-                                    UserFrom = t.Originator.Name,
-                                    UserTo = t.Recipient.Name,
-                                    Time = DateTime.Now.ToString(ConstantDateTimeFormat),
-                                    Content = "是否继续",
-                                    MessageType = MessageType.ConversationBreak
-                                };
+        //private static Action<Conversation> _createBreakMessageAction;
+        //public static Action<Conversation> CreateBreakMessageAction
+        //{
+        //    get
+        //    {
+        //        if (_createBreakMessageAction == null)
+        //        {
+        //            lock (_lockObj)
+        //            {
+        //                Action<Conversation> tempAction = t =>
+        //                {
+        //                    if (t != null && t.Originator != null && t.Recipient != null)
+        //                    {
+        //                        MessageData msg1 = new MessageData()
+        //                        {
+        //                            UserFrom = t.Originator.Name,
+        //                            UserTo = t.Recipient.Name,
+        //                            Time = DateTime.Now.ToString(ConstantDateTimeFormat),
+        //                            Content = "是否继续",
+        //                            MessageType = MessageType.ConversationBreak
+        //                        };
 
-                                MessageData msg2 = new MessageData()
-                                {
-                                    UserFrom = t.Recipient.Name,
-                                    UserTo = t.Originator.Name,
-                                    Time = DateTime.Now.ToString(ConstantDateTimeFormat),
-                                    Content = "是否继续",
-                                    MessageType = MessageType.ConversationBreak
-                                };
+        //                        MessageData msg2 = new MessageData()
+        //                        {
+        //                            UserFrom = t.Recipient.Name,
+        //                            UserTo = t.Originator.Name,
+        //                            Time = DateTime.Now.ToString(ConstantDateTimeFormat),
+        //                            Content = "是否继续",
+        //                            MessageType = MessageType.ConversationBreak
+        //                        };
 
-                                MessageDA.Instance.SaveMessage(msg1);
-                                MessageDA.Instance.SaveMessage(msg2);
-                            }
-                        };
-                        if (_createBreakMessageAction == null)
-                            _createBreakMessageAction = tempAction;
-                    }
-                }
-                return _createBreakMessageAction;
-            }
-        }
+        //                        MessageDA.Instance.SaveMessage(msg1);
+        //                        MessageDA.Instance.SaveMessage(msg2);
+        //                    }
+        //                };
+        //                if (_createBreakMessageAction == null)
+        //                    _createBreakMessageAction = tempAction;
+        //            }
+        //        }
+        //        return _createBreakMessageAction;
+        //    }
+        //}
 
         public virtual void CreateInviteMessage(Conversation c)
         {
@@ -84,6 +97,10 @@ namespace Committinger.XStrangerServic.Core
             if (c != null && c.Originator != null && c.Recipient != null)
             {
                 MessageData msg = CreateMessage(c.Recipient.Name, c.Originator.Name, MessageType.Accept);
+                MessageDA.Instance.SaveMessage(msg);
+                msg = CreateMessage(c.Originator.Name, c.Recipient.Name, MessageType.ConversationStart);
+                MessageDA.Instance.SaveMessage(msg);
+                msg = CreateMessage(c.Recipient.Name, c.Originator.Name, MessageType.ConversationStart);
                 MessageDA.Instance.SaveMessage(msg);
             }
         }

@@ -34,7 +34,7 @@ namespace Committinger.XStrangerServic.Core.DA
             new MySqlParameter("@type", MySqlDbType.String) { Value = msg.MessageType },
             new MySqlParameter("@from", MySqlDbType.String) { Value = msg.UserFrom },
             new MySqlParameter("@to", MySqlDbType.String) { Value = msg.UserTo },
-            new MySqlParameter("@content", MySqlDbType.String) { Value = msg.Content },
+            new MySqlParameter("@content", MySqlDbType.String) { Value =msg.Content },
             new MySqlParameter("@forwardtime", MySqlDbType.DateTime) { Value = DateTime.Now }
             };
 
@@ -64,15 +64,33 @@ namespace Committinger.XStrangerServic.Core.DA
                 {
                     foreach (DataRow row in ds.Tables[0].Rows)
                     {
-                        MessageData msg = new MessageData()
+                        MessageData msg = null;
+                        if (Convert.ToInt32(row["type"]) == MessageType.ConversationStart)
                         {
-                            sequence = Convert.ToInt32(row["recid"]),
-                            UserTo = Convert.ToString(row["to"]),
-                            UserFrom = Convert.ToString(row["from"]),
-                            Content = Convert.ToString(row["content"]),
-                            MessageType = Convert.ToInt32(row["type"]),
-                            Time = Convert.ToDateTime(row["forwardtime"]).ToString("yyyy-MM-dd HH:mm:ss +0800")
-                        };
+                            msg = new ConversationControlData()
+                            {
+                                sequence = Convert.ToInt32(row["recid"]),
+                                UserTo = Convert.ToString(row["to"]),
+                                UserFrom = Convert.ToString(row["from"]),
+                                Content = Convert.ToString(row["content"]),
+                                MessageType = Convert.ToInt32(row["type"]),
+                                Time = Convert.ToDateTime(row["forwardtime"]).ToString("yyyy-MM-dd HH:mm:ss +0800"),
+                                MaxPeriodSec = ConversationModule.ConstantPeriodMaxSec,
+                                MinPeriodSec = ConversationModule.ConstantPeriodMinSec,
+                            };
+                        }
+                        else
+                        {
+                            msg = new MessageData()
+                            {
+                                sequence = Convert.ToInt32(row["recid"]),
+                                UserTo = Convert.ToString(row["to"]),
+                                UserFrom = Convert.ToString(row["from"]),
+                                Content = Convert.ToString(row["content"]),
+                                MessageType = Convert.ToInt32(row["type"]),
+                                Time = Convert.ToDateTime(row["forwardtime"]).ToString("yyyy-MM-dd HH:mm:ss +0800")
+                            };
+                        }
                         data.MessageList.Add(msg);
                         data.Sequence = msg.sequence;
                     }

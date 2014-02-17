@@ -7,6 +7,7 @@ using System.Text;
 namespace Committinger.XStrangerService.ServiceInterface.DataContracts
 {
     [DataContract(Namespace = ServiceContext.DATACONTRACT_NAMESPACE)]
+    [KnownType(typeof(ConversationControlData))]
     public class MessageData
     {
         [DataMember(Name = "message_to_user")]

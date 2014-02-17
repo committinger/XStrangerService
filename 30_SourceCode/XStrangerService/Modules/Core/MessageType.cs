@@ -17,5 +17,7 @@ namespace Committinger.XStrangerServic.Core
         public const int ConversationEnded = 5;
         public const int ConversationBreak = 6;
         public const int ConversationContinue = 7;
+        public const int ConversationStart = 8;
+        public const int ConversationClosed = 9;
     }
 }

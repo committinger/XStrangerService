@@ -26,7 +26,7 @@ namespace Committinger.XStrangerServic.Core.DA
         public virtual Circle GetCircleByKey(string key)
         {
             var helper = DataHelper.CreateHelper();
-            string sql = @" select * from T_CIRCLE where find_in_set(@keywords, keywords) ";
+            string sql = @" select * from `xss`.`T_CIRCLE` where find_in_set(@keywords, keywords) ";
             List<MySqlParameter> parameterList = new List<MySqlParameter>();
             parameterList.Add(new MySqlParameter("@keywords", MySqlDbType.String) { Value = key });
             DataSet ds = helper.Query(sql, parameterList);

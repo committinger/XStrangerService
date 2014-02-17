@@ -9,19 +9,19 @@ namespace Committinger.XStrangerServic.Core
 {
     public class Conversation
     {
-        public Conversation(User originator, User recipient, int timedOutSec)
+        public Conversation(User originator, User recipient)
         {
             this.Originator = originator;
             this.Recipient = recipient;
-            this.Timer = new Timer(timedOutSec * 1000);
+            //this.Timer = new Timer(timedOutSec * 1000);
         }
 
-        void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            this.Timer.Elapsed -= _timer_Elapsed;
-            if (this.BreakAction != null)
-                this.BreakAction.Invoke(this);
-        }
+        //void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    this.Timer.Elapsed -= _timer_Elapsed;
+        //    if (this.BreakAction != null)
+        //        this.BreakAction.Invoke(this);
+        //}
 
         public Action<Conversation> BreakAction;
 
@@ -29,7 +29,7 @@ namespace Committinger.XStrangerServic.Core
 
         public User Originator { get; set; }
         public User Recipient { get; set; }
-        public Timer Timer { get; set; }
+        //public Timer Timer { get; set; }
         public bool OriginatorOpen { get; set; }
         public bool RecipientOpen { get; set; }
         public bool ConversationOpen { get { return OriginatorOpen && RecipientOpen; } }
@@ -41,7 +41,7 @@ namespace Committinger.XStrangerServic.Core
             Recipient.Available = false;
             OriginatorOpen = true;
             RecipientOpen = false;
-            this.Timer.Elapsed += _timer_Elapsed;
+            //this.Timer.Elapsed += _timer_Elapsed;
         }
     }
 }

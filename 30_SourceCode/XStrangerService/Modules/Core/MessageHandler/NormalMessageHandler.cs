@@ -16,6 +16,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
         protected override int SaveMessage(MessageData msg)
         {
             return MessageDA.Instance.SaveMessage(msg);
+
         }
 
         protected override void DoHandleMessage(MessageData message, int sequence)
@@ -49,7 +50,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
             User receiver = UserModule.Instance.GetRandomUser(sender.Name);
             if (receiver == null)
             {
-                SaveMessage(new MessageData()
+                MessageDA.Instance.SaveMessage(new MessageData()
                 {
                     MessageType = MessageType.Reject,
                     UserTo = sender.Name,
