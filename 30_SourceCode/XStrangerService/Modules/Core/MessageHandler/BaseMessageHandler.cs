@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XSSFramework.AOP;
+using XSSFramework.Log;
 
 namespace Committinger.XStrangerServic.Core.MessageHandler
 {
@@ -89,6 +90,16 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                 msgList = messageCollection.MessageList;
                 if (msgList != null)
                     msgList.ForEach(t => t.UserFrom = messageCollection.UserFrom);
+
+
+                if (msgList != null)
+                    msgList.ForEach(t =>
+                    {
+                        if (t != null)
+                        {
+                            LogUtils.Info("收到的消息：" + t.Content);
+                        }
+                    });
             }
             else
             {

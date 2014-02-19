@@ -47,8 +47,31 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
 
         protected virtual void startNewConversation(User sender)
         {
-            User receiver = UserModule.Instance.GetRandomUser(sender.Name);
-            if (receiver == null)
+            if (!sender.Available)
+            {
+                MessageDA.Instance.SaveMessage(new MessageData()
+                {
+                    MessageType = MessageType.Reject,
+                    UserTo = sender.Name,
+                    Time = DateTime.Now.ToString(ConstantDateTimeFormat),
+                    sequence = 0,
+                    Content = "you are invited to a new conversation"
+                });
+                return;
+            }
+            User receiver = null;
+            for (int count = 0; count < 3; count++)
+            {
+                receiver = UserModule.Instance.GetRandomUser(sender.Name);
+                if (receiver != null)
+                {
+                    break;
+                }
+            }
+
+            if (receiver != null)
+                ConversationModule.Instance.StartNewConversation(sender, receiver);
+            else
             {
                 MessageDA.Instance.SaveMessage(new MessageData()
                 {
@@ -58,9 +81,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                     sequence = 0,
                     Content = "failed to get free user"
                 });
-                return;
             }
-            ConversationModule.Instance.StartNewConversation(sender, receiver);
         }
     }
 }
