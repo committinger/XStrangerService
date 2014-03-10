@@ -37,9 +37,9 @@ namespace XSSFramework.Log
 
             StringBuilder exBuilder = new StringBuilder();
             exBuilder.Append(ConstantMessage).Append(message.ToString()).AppendLine();
-            exBuilder.Append(ConstantException).Append(ex.Message).AppendLine();
+            exBuilder.Append(ConstantException).Append(ex == null ? "" : ex.Message).AppendLine();
             exBuilder.AppendLine(ConstantStacktrace);
-            exBuilder.AppendLine(ex.StackTrace);
+            exBuilder.AppendLine(ex == null ? "" : ex.StackTrace);
 
             WriteLog(exBuilder, ConstantErrorLevel);
         }

@@ -74,9 +74,9 @@ namespace Committinger.XStrangerServic.Core
         {
             if (c != null)
             {
-                if (c.Originator != null && string.IsNullOrEmpty(c.Originator.Name) && Pool.ContainsKey(c.Originator.Name))
+                if (c.Originator != null && !string.IsNullOrEmpty(c.Originator.Name) && Pool.ContainsKey(c.Originator.Name))
                     Pool.Remove(c.Originator.Name);
-                if (c.Recipient != null && string.IsNullOrEmpty(c.Recipient.Name) && Pool.ContainsKey(c.Recipient.Name))
+                if (c.Recipient != null && !string.IsNullOrEmpty(c.Recipient.Name) && Pool.ContainsKey(c.Recipient.Name))
                     Pool.Remove(c.Recipient.Name);
                 c.Originator.Available = true;
                 c.Recipient.Available = true;

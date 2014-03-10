@@ -18,6 +18,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
             if (sender != null)
             {
                 Conversation c = ConversationModule.Instance.GetConversation(sender);
+                ConversationModule.Instance.RemoveConveration(c);
                 MessageModule.Instance.CreateRejectMessage(c);
             }
         }

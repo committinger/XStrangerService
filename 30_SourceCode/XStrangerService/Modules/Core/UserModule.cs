@@ -26,7 +26,7 @@ namespace Committinger.XStrangerServic.Core
 
         public static UserModule Instance { get { return ModuleInjector.Inject<UserModule>(); } }
 
-        public const int timedOutSec = 60000;
+        public const int timedOutSec = 300;
         private const double timedOutCheckIntervalSec = 30;
 
         private static Dictionary<string, User> _pool;
@@ -77,8 +77,8 @@ namespace Committinger.XStrangerServic.Core
                     LogUtils.Error(ex);
                 }
             }
-            return Instance.Register();
 
+            return Instance.Register();
         }
 
         public virtual User GetUserByName(string user_name)

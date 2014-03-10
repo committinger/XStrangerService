@@ -56,7 +56,9 @@ namespace Committinger.XStrangerServic.ServiceImplementation
             {
                 if (string.IsNullOrEmpty(circle_key))
                 {
-                    UserModule.Instance.DeleteUserByName(user_name);
+                    User deleteU = UserModule.Instance.GetOrRegisterUserByName(user_name);
+                    Conversation deleteC = ConversationModule.Instance.GetConversation(deleteU);
+                    if (deleteC != null) ConversationModule.Instance.RemoveConveration(deleteC);
                     return new StructedResultData<CircleBodyData>("0", "离开社区成功")
                     {
                         Body = new CircleBodyData()
@@ -64,6 +66,8 @@ namespace Committinger.XStrangerServic.ServiceImplementation
                 }
 
                 User user = UserModule.Instance.GetOrRegisterUserByName(user_name);
+                Conversation c = ConversationModule.Instance.GetConversation(user);
+                if (c != null) ConversationModule.Instance.RemoveConveration(c);
                 Circle circle = CircleDA.Instance.GetCircleByKey(circle_key);
                 if (circle == null)
                 {

@@ -30,7 +30,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                     cb.Register(c => ModuleInjector.Inject<RejectMessageHandler>()).Named<BaseMessageHandler>(MessageType.Reject.ToString());
                     cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
                     //cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
-                    cb.Register(c => ModuleInjector.Inject<HeartBeatMessageHandler>()).Named<BaseMessageHandler>(MessageType.HeartBeat.ToString());
+                    //cb.Register(c => ModuleInjector.Inject<HeartBeatMessageHandler>()).Named<BaseMessageHandler>(MessageType.HeartBeat.ToString());
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
@@ -51,9 +51,9 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
              *  2、后续处理
              *  3、获得返回值 
              */
-            //DoPreHandleMessage(message, sequence);
+            if (message != null && !string.IsNullOrEmpty(message.UserFrom))
+                HeartBeat(message.UserFrom);
             DoHandleMessage(message, sequence);
-            //DoAfterHandleMessage(message, sequence);
             MessageCollectionData result = GetMessage(sequence, message);
             return result;
         }
@@ -63,24 +63,21 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
             int insertedSequence = SaveMessage(message);
         }
 
-
+        protected virtual void HeartBeat(string userName)
+        {
+            User u = UserModule.Instance.GetUserByName(userName);
+            if (u != null) u.HeartBeat();
+        }
 
         protected virtual int SaveMessage(MessageData msg)
         {
             return 0;
-            //return MessageDA.Instance.SaveMessage(msg);
         }
 
         protected virtual MessageCollectionData GetMessage(int sequence, MessageData msg)
         {
             return MessageDA.Instance.GetMessage(sequence, msg.UserFrom);
         }
-
-        //protected virtual void DoPreHandleMessage(MessageData message, int sequence) { }
-        //protected virtual void DoAfterHandleMessage(MessageData message, int sequence) { }
-
-
-
         public static List<MessageData> PreProcess(MessageCollectionData messageCollection)
         {
             List<MessageData> msgList = new List<MessageData>();
@@ -101,20 +98,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                         }
                     });
             }
-            else
-            {
-                msgList.Add(BuildHeartbeatMessage(messageCollection));
-            }
-
             return msgList;
-        }
-        private static MessageData BuildHeartbeatMessage(MessageCollectionData messageCollection)
-        {
-            return new MessageData()
-            {
-                UserFrom = messageCollection.UserFrom,
-                MessageType = MessageType.HeartBeat
-            };
         }
     }
 }

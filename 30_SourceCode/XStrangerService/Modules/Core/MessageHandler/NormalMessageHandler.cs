@@ -49,6 +49,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
         {
             if (!sender.Available)
             {
+                LogUtils.AsyncError(sender.Name + "锁定");
                 MessageDA.Instance.SaveMessage(new MessageData()
                 {
                     MessageType = MessageType.Reject,
@@ -59,28 +60,55 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                 });
                 return;
             }
-            User receiver = null;
-            for (int count = 0; count < 3; count++)
-            {
-                receiver = UserModule.Instance.GetRandomUser(sender.Name);
-                if (receiver != null)
-                {
-                    break;
-                }
-            }
-
-            if (receiver != null)
-                ConversationModule.Instance.StartNewConversation(sender, receiver);
             else
             {
-                MessageDA.Instance.SaveMessage(new MessageData()
+                LogUtils.AsyncError(sender.Name + "未锁定");
+                sender.Available = false;
+                try
                 {
-                    MessageType = MessageType.Reject,
-                    UserTo = sender.Name,
-                    Time = DateTime.Now.ToString(ConstantDateTimeFormat),
-                    sequence = 0,
-                    Content = "failed to get free user"
-                });
+                    User receiver = null;
+                    for (int count = 0; count < 3; count++)
+                    {
+                        receiver = UserModule.Instance.GetRandomUser(sender.Name);
+                        LogUtils.AsyncError(sender.Name + "获取用户:" + count);
+                        if (receiver != null)
+                        {
+                            LogUtils.AsyncError(sender.Name + "获取用户成功:" + count);
+                            break;
+                        }
+                    }
+
+                    if (receiver != null)
+                    {
+                        receiver.Available = false;
+                        try
+                        {
+                            LogUtils.AsyncError(sender.Name + "获取用户成功，开始新会话");
+                            ConversationModule.Instance.StartNewConversation(sender, receiver);
+                        }
+                        catch
+                        {
+                            receiver.Available = true;
+                        }
+                    }
+                    else
+                    {
+                        LogUtils.AsyncError(sender.Name + "获取用户失败");
+                        sender.Available = true;
+                        MessageDA.Instance.SaveMessage(new MessageData()
+                        {
+                            MessageType = MessageType.Reject,
+                            UserTo = sender.Name,
+                            Time = DateTime.Now.ToString(ConstantDateTimeFormat),
+                            sequence = 0,
+                            Content = "failed to get free user"
+                        });
+                    }
+                }
+                catch
+                {
+                    sender.Available = true;
+                }
             }
         }
     }

@@ -65,9 +65,6 @@
     <Compile Include="MessageHandler\BaseMessageHandler.cs" />
     <Compile Include="MessageHandler\NormalMessageHandler.cs" />
     <Compile Include="MessageHandler\AcceptMessageHandler.cs" />
-    <Compile Include="MessageHandler\HeartBeatMessageHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MessageHandler\RejectMessageHandler.cs" />
     <Compile Include="MessageHandler\EndMessageHandler.cs" />
     <Compile Include="MessageHandler\ContinueMessageHandler.cs" />
