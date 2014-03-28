@@ -17,6 +17,7 @@ namespace WebTester
         private const string constantConfigFileName = "config.txt";
         private const string constantConfigSetSign = "=";
         private const string constantConfigUrl = "URL";
+        private static Encoding constrantEncoding = Encoding.UTF8;
         #endregion
 
         #region 私有成员
@@ -190,7 +191,8 @@ namespace WebTester
             {
                 setStateBusy();
                 client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                client.Encoding = constrantEncoding;
+                //client.
                 string url = tbUrl.Text;
 
                 string data = tbPostRequest.Text;
@@ -215,7 +217,7 @@ namespace WebTester
             {
                 setStateBusy();
                 client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                client.Encoding = constrantEncoding;
                 client.DownloadStringCompleted += client_GetCompleted;
                 string url = tbUrl.Text;
                 client.DownloadStringAsync(new Uri(url));

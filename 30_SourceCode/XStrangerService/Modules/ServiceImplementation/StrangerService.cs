@@ -59,6 +59,7 @@ namespace Committinger.XStrangerServic.ServiceImplementation
                     User deleteU = UserModule.Instance.GetOrRegisterUserByName(user_name);
                     Conversation deleteC = ConversationModule.Instance.GetConversation(deleteU);
                     if (deleteC != null) ConversationModule.Instance.RemoveConveration(deleteC);
+                    UserModule.Instance.Remove(deleteU);
                     return new StructedResultData<CircleBodyData>("0", "离开社区成功")
                     {
                         Body = new CircleBodyData()

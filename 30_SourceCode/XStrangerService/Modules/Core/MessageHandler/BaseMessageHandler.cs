@@ -54,7 +54,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
             if (message != null && !string.IsNullOrEmpty(message.UserFrom))
                 HeartBeat(message.UserFrom);
             DoHandleMessage(message, sequence);
-            MessageCollectionData result = GetMessage(sequence, message);
+            MessageCollectionData result = GetMessage(sequence, message.UserFrom);
             return result;
         }
 
@@ -74,9 +74,9 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
             return 0;
         }
 
-        protected virtual MessageCollectionData GetMessage(int sequence, MessageData msg)
+        public static MessageCollectionData GetMessage(int sequence, string userFrom)
         {
-            return MessageDA.Instance.GetMessage(sequence, msg.UserFrom);
+            return MessageDA.Instance.GetMessage(sequence, userFrom);
         }
         public static List<MessageData> PreProcess(MessageCollectionData messageCollection)
         {

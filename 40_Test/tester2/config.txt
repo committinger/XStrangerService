@@ -1,0 +1,2 @@
+﻿
+URL=http://localhost:8099/Stranger/host/messageSync?req_timestamp=12312313123=&req_client_platform=ios&req_client_version=1.0
