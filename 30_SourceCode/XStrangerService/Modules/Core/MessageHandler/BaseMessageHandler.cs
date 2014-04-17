@@ -29,7 +29,7 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
                     cb.Register(c => ModuleInjector.Inject<AcceptMessageHandler>()).Named<BaseMessageHandler>(MessageType.Accept.ToString());
                     cb.Register(c => ModuleInjector.Inject<RejectMessageHandler>()).Named<BaseMessageHandler>(MessageType.Reject.ToString());
                     cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
-                    //cb.Register(c => ModuleInjector.Inject<EndMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationEnded.ToString());
+                    cb.Register(c => ModuleInjector.Inject<ContinueMessageHandler>()).Named<BaseMessageHandler>(MessageType.ConversationContinue.ToString());
                     //cb.Register(c => ModuleInjector.Inject<HeartBeatMessageHandler>()).Named<BaseMessageHandler>(MessageType.HeartBeat.ToString());
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
                     //cb.Register(c => ModuleInjector.Inject<MySqlHelper>()).Named<MessageHandler>("MySql");
@@ -51,8 +51,6 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
              *  2、后续处理
              *  3、获得返回值 
              */
-            if (message != null && !string.IsNullOrEmpty(message.UserFrom))
-                HeartBeat(message.UserFrom);
             DoHandleMessage(message, sequence);
             MessageCollectionData result = GetMessage(sequence, message.UserFrom);
             return result;
@@ -61,12 +59,6 @@ namespace Committinger.XStrangerServic.Core.MessageHandler
         protected virtual void DoHandleMessage(MessageData message, int sequence)
         {
             int insertedSequence = SaveMessage(message);
-        }
-
-        protected virtual void HeartBeat(string userName)
-        {
-            User u = UserModule.Instance.GetUserByName(userName);
-            if (u != null) u.HeartBeat();
         }
 
         protected virtual int SaveMessage(MessageData msg)

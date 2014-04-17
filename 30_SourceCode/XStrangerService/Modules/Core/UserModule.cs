@@ -14,6 +14,12 @@ namespace Committinger.XStrangerServic.Core
     [Intercept(typeof(Logger))]
     public class UserModule
     {
+        private const string constAppsettingsTimedOutSecKey = "userTimedOutSec";
+        private const string constAppsettingsTimedOutCheckIntervalSecKey = "userTimedOutCheckIntervalSec";
+        private static int timedOutSec = int.Parse(System.Configuration.ConfigurationSettings.AppSettings[constAppsettingsTimedOutSecKey]);
+        private static int timedOutCheckIntervalSec = int.Parse(System.Configuration.ConfigurationSettings.AppSettings[constAppsettingsTimedOutCheckIntervalSecKey]);
+
+
         static UserModule()
         {
             _pool = new Dictionary<string, User>();
@@ -26,8 +32,6 @@ namespace Committinger.XStrangerServic.Core
 
         public static UserModule Instance { get { return ModuleInjector.Inject<UserModule>(); } }
 
-        public const int timedOutSec = 300;
-        private const double timedOutCheckIntervalSec = 30;
 
         private static Dictionary<string, User> _pool;
         public static Dictionary<string, User> Pool { get { return _pool; } }

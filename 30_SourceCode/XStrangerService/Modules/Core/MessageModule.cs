@@ -23,6 +23,10 @@ namespace Committinger.XStrangerServic.Core
             if (messageCollection == null)
                 return null;
 
+            //heartbeat
+            User u = UserModule.Instance.GetUserByName(messageCollection.UserFrom);
+            if (u != null) u.HeartBeat();
+
             if (messageCollection.MessageList == null || messageCollection.MessageList.Count == 0)
             {
                 return BaseMessageHandler.GetMessage(messageCollection.Sequence, messageCollection.UserFrom);
@@ -41,6 +45,8 @@ namespace Committinger.XStrangerServic.Core
 
             return collectionData;
         }
+
+
 
         private static object _lockObj = new object();
 
